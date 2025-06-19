@@ -1,9 +1,12 @@
-import WordMark from "./WordMark";
+import { createClient } from "@/prismicio";
+import { NavBar } from "./NavBar";
+export default async function Header() {
+  const client = createClient();
+  const settings = await client.getSingle("settings");
 
-export const Header = () => {
   return (
-    <div>
-      <WordMark />
-    </div>
+    <header>
+      <NavBar settings={settings} />
+    </header>
   );
-};
+}
