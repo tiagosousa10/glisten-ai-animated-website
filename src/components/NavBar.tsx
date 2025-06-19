@@ -3,6 +3,7 @@ import { Content } from "@prismicio/client";
 import WordMark from "./WordMark";
 import { PrismicNextLink } from "@prismicio/next";
 import Link from "next/link";
+import ButtonLink from "./ButtonLink";
 
 type NavBarProps = {
   settings: Content.SettingsDocument;
@@ -17,16 +18,25 @@ export const NavBar = ({ settings }: NavBarProps) => {
           <span className="sr-only">Glisten.ai Home Page</span>
         </Link>
         <ul className="flex gap-6">
-          {settings.data.navigation.map((item) => (
-            <li key={item.label}>
-              <PrismicNextLink
-                className="inline-flex max-h-11 items-center"
-                field={item.link}
-              >
-                {item.label}
-              </PrismicNextLink>
-            </li>
-          ))}
+          {settings.data.navigation.map((item) => {
+            if (item.cta_button) {
+              return (
+                <li key={item.label}>
+                  <ButtonLink field={item.link}>{item.label}</ButtonLink>
+                </li>
+              );
+            }
+            return (
+              <li key={item.label}>
+                <PrismicNextLink
+                  className="inline-flex max-h-11 items-center"
+                  field={item.link}
+                >
+                  {item.label}
+                </PrismicNextLink>
+              </li>
+            );
+          })}
         </ul>
       </div>
     </nav>
