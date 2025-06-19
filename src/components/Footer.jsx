@@ -1,3 +1,9 @@
+import WordMark from "./WordMark";
+
 export const Footer = () => {
-  return <div>Footer</div>;
+  return (
+    <div>
+      <WordMark />
+    </div>
+  );
 };
