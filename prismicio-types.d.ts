@@ -4,7 +4,7 @@ import type * as prismic from "@prismicio/client";
 
 type Simplify<T> = { [KeyType in keyof T]: T[KeyType] };
 
-type PageDocumentDataSlicesSlice = HeroSlice | RichTextSlice;
+type PageDocumentDataSlicesSlice = BentoSlice | HeroSlice | RichTextSlice;
 
 /**
  * Content for Page documents
@@ -180,6 +180,52 @@ export type SettingsDocument<Lang extends string = string> =
 export type AllDocumentTypes = PageDocument | SettingsDocument;
 
 /**
+ * Item in *Bento → Default → Primary → Group*
+ */
+export interface BentoSliceDefaultPrimaryGroupItem {
+  /**
+   * Title field in *Bento → Default → Primary → Group*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: bento.default.primary.group[].title
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  title: prismic.RichTextField;
+
+  /**
+   * Body field in *Bento → Default → Primary → Group*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: bento.default.primary.group[].body
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  body: prismic.RichTextField;
+
+  /**
+   * Image field in *Bento → Default → Primary → Group*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: bento.default.primary.group[].image
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  image: prismic.ImageField<never>;
+
+  /**
+   * Wide field in *Bento → Default → Primary → Group*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: false
+   * - **API ID Path**: bento.default.primary.group[].wide
+   * - **Documentation**: https://prismic.io/docs/field#boolean
+   */
+  wide: prismic.BooleanField;
+}
+
+/**
  * Primary content in *Bento → Default → Primary*
  */
 export interface BentoSliceDefaultPrimary {
@@ -204,34 +250,14 @@ export interface BentoSliceDefaultPrimary {
   body: prismic.RichTextField;
 
   /**
-   * Title field in *Bento → Default → Primary*
+   * Group field in *Bento → Default → Primary*
    *
-   * - **Field Type**: Title
+   * - **Field Type**: Group
    * - **Placeholder**: *None*
-   * - **API ID Path**: bento.default.primary.title
-   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   * - **API ID Path**: bento.default.primary.group[]
+   * - **Documentation**: https://prismic.io/docs/field#group
    */
-  title: prismic.TitleField;
-
-  /**
-   * Body field in *Bento → Default → Primary*
-   *
-   * - **Field Type**: Rich Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: bento.default.primary.body2
-   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
-   */
-  body2: prismic.RichTextField;
-
-  /**
-   * Image field in *Bento → Default → Primary*
-   *
-   * - **Field Type**: Image
-   * - **Placeholder**: *None*
-   * - **API ID Path**: bento.default.primary.image
-   * - **Documentation**: https://prismic.io/docs/field#image
-   */
-  image: prismic.ImageField<never>;
+  group: prismic.GroupField<Simplify<BentoSliceDefaultPrimaryGroupItem>>;
 }
 
 /**
@@ -423,6 +449,7 @@ declare module "@prismicio/client" {
       SettingsDocumentDataNavigationItem,
       AllDocumentTypes,
       BentoSlice,
+      BentoSliceDefaultPrimaryGroupItem,
       BentoSliceDefaultPrimary,
       BentoSliceVariation,
       BentoSliceDefault,
