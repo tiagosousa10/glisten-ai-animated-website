@@ -5,6 +5,12 @@ import Bounded from "@/components/Bounded";
 import { PrismicNextImage } from "@prismicio/next";
 import ButtonLink from "@/components/ButtonLink";
 import clsx from "clsx";
+import { PiArrowClockwise, PiGear } from "react-icons/pi";
+
+const icon = {
+  gear: <PiGear />,
+  cycle: <PiArrowClockwise />,
+};
 
 /**
  * Props for `Showcase`.
@@ -34,12 +40,14 @@ const Showcase: FC<ShowcaseProps> = ({ slice }) => {
       />
       <div className="grid mt-16 items-center rounded-xl border border-blue-50/20 bg-gradient-to-b from-slate-50/15 to-slate-50/5 px-8 py-8 backdrop-blur-sm lg:grid-cols-3 lg:py-12">
         <div>
-          <>{slice.primary.icon}</>
+          <div className="w-fit rounded-lg bg-blue-500/35 p-4 text-3xl">
+            <>{slice.primary.icon && icon[slice.primary.icon]}</>
+          </div>
           <div className="mt-6 text-2xl font-normal">
             <PrismicRichText field={slice.primary.subheading} />
           </div>
 
-          <div className="mt-4 max-w-xl">
+          <div className="prose mt-4 max-w-xl prose-invert">
             <PrismicRichText field={slice.primary.body} />
           </div>
           <ButtonLink field={slice.primary.button_link} className="mt-6">
