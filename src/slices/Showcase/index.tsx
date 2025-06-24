@@ -58,8 +58,11 @@ const Showcase: FC<ShowcaseProps> = ({ slice }) => {
           field={slice.primary.image}
           className={clsx(
             "opacity-90 shadow-2xl lg:col-span-2 lg:pt-0",
-            "lg:-order-1 lg:translate-x-[-15%]"
+            slice.variation === "reverse"
+              ? "lg:order-1 lg:translate-x-[-15%]"
+              : "lg:-order-1 lg:translate-x-[-15%]"
           )}
+          alt=""
         />
       </div>
     </Bounded>
