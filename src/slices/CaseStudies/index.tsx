@@ -1,6 +1,12 @@
-import { FC } from "react";
-import { Content } from "@prismicio/client";
-import { SliceComponentProps } from "@prismicio/react";
+import { FC, JSX } from "react";
+import { Content, isFilled } from "@prismicio/client";
+import {
+  PrismicRichText,
+  PrismicText,
+  SliceComponentProps,
+} from "@prismicio/react";
+import { createClient } from "@/prismicio";
+import { PrismicNextLink } from "@prismicio/next";
 
 /**
  * Props for `CaseStudies`.
@@ -10,41 +16,52 @@ export type CaseStudiesProps = SliceComponentProps<Content.CaseStudiesSlice>;
 /**
  * Component for "CaseStudies" Slices.
  */
-const CaseStudies: FC<CaseStudiesProps> = ({ slice }) => {
+const CaseStudies: FC<CaseStudiesProps> = async ({
+  slice,
+}): Promise<JSX.Element> => {
+  const client = createClient();
+
+  const caseStudies = await Promise.all(
+    slice.primary.rzone.map(async (item) => {
+      if (isFilled.contentRelationship(item.case_study)) {
+        return await client.getByID<Content.CaseStudyDocument>(
+          item.case_study.id
+        );
+      }
+    })
+  );
+
   return (
     <section
       data-slice-type={slice.slice_type}
       data-slice-variation={slice.variation}
     >
-      Placeholder component for case_studies (variation: {slice.variation})
-      slices.
-      <br />
-      <strong>You can edit this slice directly in your code editor.</strong>
-      {/**
-       * 💡 Use Prismic MCP with your code editor
-       *
-       * Get AI-powered help to build your slice components — based on your actual model.
-       *
-       * ▶️ Setup:
-       * 1. Add a new MCP Server in your code editor:
-       *
-       * {
-       *   "mcpServers": {
-       *     "Prismic MCP": {
-       *       "command": "npx",
-       *       "args": ["-y", "@prismicio/mcp-server"]
-       *     }
-       *   }
-       * }
-       *
-       * 2. Select a model optimized for coding (e.g. Claude 3.7 Sonnet or similar)
-       *
-       * ✅ Then open your slice file and ask your code editor:
-       *    "Code this slice"
-       *
-       * Your code editor reads your slice model and helps you code faster ⚡
-       * 📚 Give your feedback: https://community.prismic.io/t/help-us-shape-the-future-of-slice-creation/19505
-       */}
+      <PrismicRichText field={slice.primary.heading} />
+      <PrismicRichText field={slice.primary.body} />
+
+      <div className="mt-20 grid gap-16">
+        {caseStudies.map(
+          (caseStudy, index) =>
+            caseStudy && (
+              <div
+                key={caseStudy.id}
+                className="relative grid gap-4 opacity-85 transition-opacity duration-300 hover:opacity-100 md:grid-cols-2 md:gap-8 lg:grid-cols-3 hover:cursor-pointer "
+              >
+                <h3 className="4xl">
+                  <PrismicText field={caseStudy.data.company} />
+                </h3>
+                <div className="max-w-md">
+                  <PrismicRichText field={caseStudy.data.description} />
+                </div>
+                <PrismicNextLink
+                  document={caseStudy}
+                  className="after:absolute after:inset-0 hover:underline"
+                />
+                Read <PrismicText field={caseStudy.data.company} />
+              </div>
+            )
+        )}
+      </div>
     </section>
   );
 };
