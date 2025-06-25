@@ -63,6 +63,7 @@ const Bento: FC<BentoProps> = ({ slice }) => {
                 className="max-h-36 w-auto"
                 field={item.image}
                 fallbackAlt=""
+                alt=""
               />
             </div>
           )

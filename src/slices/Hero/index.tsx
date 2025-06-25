@@ -5,7 +5,7 @@ import {
   PrismicText,
   SliceComponentProps,
 } from "@prismicio/react";
-import { PrismicNextImage, PrismicNextLink } from "@prismicio/next";
+import { PrismicNextImage } from "@prismicio/next";
 import ButtonLink from "@/components/ButtonLink";
 import Bounded from "@/components/Bounded";
 import StarGrid from "@/components/StarGrid";
@@ -51,6 +51,7 @@ const Hero: FC<HeroProps> = ({ slice }) => {
             <PrismicNextImage
               className="rounded-lg"
               field={slice.primary.image}
+              alt=""
             />
           </div>
         )}
