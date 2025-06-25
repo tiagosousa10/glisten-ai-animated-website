@@ -1,7 +1,24 @@
-import { FC } from "react";
+import React, { FC } from "react";
 import { Content } from "@prismicio/client";
-import { SliceComponentProps } from "@prismicio/react";
-
+import {
+  PrismicRichText,
+  PrismicText,
+  SliceComponentProps,
+} from "@prismicio/react";
+import Bounded from "@/components/Bounded";
+import StarBackground from "./StarBackground";
+import background from "./background.jpg";
+import Image from "next/image";
+import {
+  FaDigitalOcean,
+  FaCloudflare,
+  FaNpm,
+  FaGithub,
+  FaFigma,
+  FaFly,
+} from "react-icons/fa6";
+import StylizedLogoMark from "./StylizedLogoMark";
+import clsx from "clsx";
 /**
  * Props for `Integrations`.
  */
@@ -11,41 +28,69 @@ export type IntegrationsProps = SliceComponentProps<Content.IntegrationsSlice>;
  * Component for "Integrations" Slices.
  */
 const Integrations: FC<IntegrationsProps> = ({ slice }) => {
+  const icons = {
+    digitalocean: <FaDigitalOcean />,
+    cloudflare: <FaCloudflare />,
+    npm: <FaNpm />,
+    github: <FaGithub />,
+    figma: <FaFigma />,
+    fly: <FaFly />,
+  };
+
   return (
-    <section
+    <Bounded
       data-slice-type={slice.slice_type}
       data-slice-variation={slice.variation}
+      className="relative overflow-hidden"
     >
-      Placeholder component for integrations (variation: {slice.variation})
-      slices.
-      <br />
-      <strong>You can edit this slice directly in your code editor.</strong>
-      {/**
-       * 💡 Use Prismic MCP with your code editor
-       *
-       * Get AI-powered help to build your slice components — based on your actual model.
-       *
-       * ▶️ Setup:
-       * 1. Add a new MCP Server in your code editor:
-       *
-       * {
-       *   "mcpServers": {
-       *     "Prismic MCP": {
-       *       "command": "npx",
-       *       "args": ["-y", "@prismicio/mcp-server"]
-       *     }
-       *   }
-       * }
-       *
-       * 2. Select a model optimized for coding (e.g. Claude 3.7 Sonnet or similar)
-       *
-       * ✅ Then open your slice file and ask your code editor:
-       *    "Code this slice"
-       *
-       * Your code editor reads your slice model and helps you code faster ⚡
-       * 📚 Give your feedback: https://community.prismic.io/t/help-us-shape-the-future-of-slice-creation/19505
-       */}
-    </section>
+      <Image
+        src={background}
+        alt=""
+        fill
+        className="object-cover"
+        quality={90}
+      />
+      <StarBackground />
+
+      <div className="relative">
+        <h2 className="mx-auto max-w-2xl text-balance text-center text-5xl font-medium md:text-7xl">
+          <PrismicText field={slice.primary.heading} />
+        </h2>
+
+        <div className="mx-auto mt-6 max-w-md text-balance text-center text-slate-300">
+          <PrismicRichText field={slice.primary.body} />
+        </div>
+
+        {/* TODO : FIX ICONS -> they arent mapping correctly */}
+        <div className="mt-20 flex flex-col items-center md:flex-row">
+          {slice.primary.repeatable.map(async (item, index) => {
+            return (
+              <React.Fragment key={index}>
+                {index === Math.floor(slice.items.length / 2) && (
+                  <>
+                    <StylizedLogoMark />
+                    <div className="signal-line rotate-180 bg-gradient-to-t" />
+                  </>
+                )}
+                <div className="pulsing-icon flex aspect-square shrink-0 items-center justify-center rounded-full border border-blue-50/30 bg-blue-50/25 p-3 text-3xl text-blue-100 opacity-40 md:text-4xl lg:text-5xl">
+                  {item.icon && icons[item.icon]}
+                </div>
+                {index !== slice.primary.repeatable.length - 1 && (
+                  <div
+                    className={clsx(
+                      "signal-line",
+                      index >= Math.floor(slice.primary.repeatable.length / 2)
+                        ? "rotate-180"
+                        : "rotate-0"
+                    )}
+                  />
+                )}
+              </React.Fragment>
+            );
+          })}
+        </div>
+      </div>
+    </Bounded>
   );
 };
 
